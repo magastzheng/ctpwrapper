@@ -1,9 +1,19 @@
 #pragma once
+
+#ifndef CTPQUOTE_H_
+#define CTPQUOTE_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define DllExport __declspec(dllexport)
-#define WINAPI __stdcall
+#define WINAPI _cdecl
 #define WIN32_LEAN_AND_MEAN
 
-#include <Windows.h>
+//#include <Windows.h>
+
+
 
 struct MarketData
 {
@@ -22,7 +32,7 @@ struct MarketData
 	///上次结算价
 	//TThostFtdcPriceType	PreSettlementPrice;
 	///昨收盘
-	//TThostFtdcPriceType	PreClosePrice;
+	double	PreClosePrice;
 	///昨持仓量
 	//TThostFtdcLargeVolumeType	PreOpenInterest;
 	///今开盘
@@ -31,24 +41,10 @@ struct MarketData
 	double	HighestPrice;
 	///最低价
 	double	LowestPrice;
-	///数量
-	//TThostFtdcVolumeType	Volume;
-	///成交金额
-	//TThostFtdcMoneyType	Turnover;
-	///持仓量
-	//TThostFtdcLargeVolumeType	OpenInterest;
-	///今收盘
-	//TThostFtdcPriceType	ClosePrice;
-	///本次结算价
-	//TThostFtdcPriceType	SettlementPrice;
 	///涨停板价
 	double	UpperLimitPrice;
 	///跌停板价
 	double	LowerLimitPrice;
-	///昨虚实度
-	//TThostFtdcRatioType	PreDelta;
-	///今虚实度
-	//TThostFtdcRatioType	CurrDelta;
 	///最后修改时间
 	char	UpdateTime[32];
 	///最后修改毫秒
@@ -93,19 +89,57 @@ struct MarketData
 	double	AskPrice5;
 	///申卖量五
 	int	AskVolume5;
-	///当日均价
-	//TThostFtdcPriceType	AveragePrice;
-	///业务日期
-	//TThostFtdcDateType	ActionDay;
 };
 
-typedef int (WINAPI *FrontConnected)();
-typedef int (WINAPI *FrontDisconnected)(int nReason);
-typedef int (WINAPI *RspUserLogin)(int nRequestId);
-typedef int (WINAPI *RspUserLogout)(int nReason);
-typedef int (WINAPI *RspError)(int nErrorId, const char *strMsg);
-typedef int (WINAPI *RspSubMarketData)();
-typedef int (WINAPI *RtnDepthMarketData)(MarketData* data);
+typedef int (WINAPI *PFnOnFrontConnected)();
+typedef int (WINAPI *PFnOnFrontDisconnected)(int nReason);
+typedef int (WINAPI *PFnOnHeartBeatWarning)(int nTimeLapse);
+typedef int (WINAPI *PFnOnRspUserLogin)(int nRequestId);
+typedef int (WINAPI *PFnOnRspUserLogout)(int nReason);
+typedef int (WINAPI *PFnOnRspError)(int nErrorId, const char *strErrMsg);
+typedef int (WINAPI *PFnOnRspSubMarketData)(int nRequestId, const char *investmentID, int nErrorId, const char *strErrMsg);
+typedef int (WINAPI *PFnOnRspUnSubMarketData)(int nRequestId, const char *investmentID, int nErrorId, const char *strErrMsg);
+typedef int (WINAPI *PFnOnRspSubForQuoteRsp)(int nRequestId, const char *investmentID, int nErrorId, const char *strErrMsg);
+typedef int (WINAPI *PFnOnRspUnSubForQuoteRsp)(int nRequestId, const char *investmentID, int nErrorId, const char *strErrMsg);
+typedef int (WINAPI *PFnOnRtnDepthMarketData)(MarketData *data);
 
+//void* _OnFrontConnected;
+//void* _OnFrontDisconnected;
+//void* _OnRspUserLogin;
+//void* _OnRspUserLogout;
+//void* _OnRspError;
+//void* _OnRspSubMarketData;
+//void* _OnRspUnSubMarketData;
+//void* _OnRspSubForQuoteRsp;
+//void* _OnRspUnSubForQuoteRsp;
+//void* _OnRtnDepthMarketData;
 
+class QuoteAPI;
+class CTPManager;
 
+DllExport CTPManager* WINAPI CreateAPI(char *pszNsAddress);
+DllExport void WINAPI DestroyAPI(CTPManager* mgr);
+DllExport void WINAPI RegOnFrontConnected(CTPManager* mgr, PFnOnFrontConnected onFrontConnected);
+DllExport void WINAPI RegOnFrontDisconnected(CTPManager* mgr, PFnOnFrontDisconnected onFrontDisconnected);
+DllExport void WINAPI RegOnHeartBeatWarning(CTPManager* mgr, PFnOnHeartBeatWarning onHeartBeatWarning);
+DllExport void WINAPI RegOnRspUserLogin(CTPManager* mgr, PFnOnRspUserLogin onRspUserLogin);
+DllExport void WINAPI RegOnRspUserLogout(CTPManager* mgr, PFnOnRspUserLogout onRspUserLogout);
+DllExport void WINAPI RegOnRspError(CTPManager* mgr, PFnOnRspError onRspError);
+DllExport void WINAPI RegOnRspSubMarketData(CTPManager* mgr, PFnOnRspSubMarketData onRspSubMarketData);
+DllExport void WINAPI RegOnRspUnSubMarketData(CTPManager* mgr, PFnOnRspUnSubMarketData onRspUnSubMarketData);
+DllExport void WINAPI RegOnRspSubForQuoteRsp(CTPManager* mgr, PFnOnRspSubForQuoteRsp onRspSubForQuoteRsp);
+DllExport void WINAPI RegOnRspUnSubForQuoteRsp(CTPManager* mgr, PFnOnRspUnSubForQuoteRsp onRspUnSubForQuoteRsp);
+DllExport void WINAPI RegOnRtnDepthMarketData(CTPManager* mgr, PFnOnRtnDepthMarketData onRtnDepthMarketData);
+
+DllExport int WINAPI ReqUserLogin(CTPManager* mgr, char* brokerId, char* userId, char* password);
+DllExport int WINAPI ReqUserLogout(CTPManager* mgr, char* brokerId, char* userId);
+DllExport int WINAPI SubscribeMarketData(CTPManager* mgr, char *ppInvestmentID[], int nCount);
+DllExport int WINAPI UnSubscribeMarketData(CTPManager* mgr, char *ppInstrumentID[], int nCount);
+DllExport int WINAPI SubscribeForQuoteRsp(CTPManager* mgr, char *ppInstrumentID[], int nCount);
+DllExport int WINAPI UnSubscribeForQuoteRsp(CTPManager* mgr, char *ppInstrumentID[], int nCount);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

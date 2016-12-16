@@ -1,5 +1,10 @@
 #pragma once
-#include "ThostFtdcMdApi.h"
+
+#ifndef QUOTEAPI_H_
+#define QUOTEAPI_H_
+
+#include "../include/ThostFtdcMdApi.h"
+#include "CTPQuote.h"
 
 class QuoteAPI : CThostFtdcMdSpi
 {
@@ -49,5 +54,32 @@ public:
 
 	///Ñ¯¼ÛÍ¨Öª
 	virtual void OnRtnForQuoteRsp(CThostFtdcForQuoteRspField *pForQuoteRsp);
+
+public:
+	void RegOnFrontConnected(PFnOnFrontConnected onFrontConnected);
+	void RegOnFrontDisconnected(PFnOnFrontDisconnected onFrontDisconnected);
+	void RegOnHeartBeatWarning(PFnOnHeartBeatWarning onHeartBeatWarning);
+	void RegOnRspUserLogin(PFnOnRspUserLogin onRspUserLogin);
+	void RegOnRspUserLogout(PFnOnRspUserLogout onRspUserLogout);
+	void RegOnRspError(PFnOnRspError onRspError);
+	void RegOnRspSubMarketData(PFnOnRspSubMarketData onRspSubMarketData);
+	void RegOnRspUnSubMarketData(PFnOnRspUnSubMarketData onRspUnSubMarketData);
+	void RegOnRspSubForQuoteRsp(PFnOnRspSubForQuoteRsp onRspSubForQuoteRsp);
+	void RegOnRspUnSubForQuoteRsp(PFnOnRspUnSubForQuoteRsp onRspUnSubForQuoteRsp);
+	void RegOnRtnDepthMarketData(PFnOnRtnDepthMarketData onRtnDepthMarketData);
+
+private:
+	PFnOnFrontConnected			_fnOnFrontConnected;
+	PFnOnFrontDisconnected		_fnOnFrontDisconnected;
+	PFnOnHeartBeatWarning		_fnOnHeartBeatWarning;
+	PFnOnRspUserLogin			_fnOnRspUserLogin;
+	PFnOnRspUserLogout			_fnOnRspUserLogout;
+	PFnOnRspError				_fnOnRspError;
+	PFnOnRspSubMarketData		_fnOnRspSubMarketData;
+	PFnOnRspUnSubMarketData		_fnOnRspUnSubMarketData;
+	PFnOnRspSubForQuoteRsp		_fnOnRspSubForQuoteRsp;
+	PFnOnRspUnSubForQuoteRsp	_fnOnRspUnSubForQuoteRsp;
+	PFnOnRtnDepthMarketData		_fnOnRtnDepthMarketData;
 };
 
+#endif
