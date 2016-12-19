@@ -10,6 +10,9 @@ namespace CTPWrapper
     {
         static void Main(string[] args)
         {
+            CTPWrapImpl ctpImpl = new CTPWrapImpl();
+            ctpImpl.CreateAPI("");
+            ctpImpl.ReqUserLogin("test", "test", "test");
         }
     }
 }

@@ -2,12 +2,6 @@
 #include "QuoteAPI.h";
 #include "TPManager.h"
 
-//CThostFtdcMdApi* md;
-//QuoteAPI *api;
-//int requestId = 0;
-
-//CTPManager* mgr;
-
 CTPManager* WINAPI CreateAPI(char *pszNsAddress)
 {
 	CTPManager* mgr = new CTPManager();
