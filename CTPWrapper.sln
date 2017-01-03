@@ -6,6 +6,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp_proxy", "ctp_proxy\ctp_proxy.vcxproj", "{C6BDF488-BE2E-4645-AF26-512B11169E73}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp_proxy_test", "ctp_proxy_test\ctp_proxy_test.vcxproj", "{519A2951-EBDA-4303-A122-B742A97238B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6BDF488-BE2E-4645-AF26-512B11169E73} = {C6BDF488-BE2E-4645-AF26-512B11169E73}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

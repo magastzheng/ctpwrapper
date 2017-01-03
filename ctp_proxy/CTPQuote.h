@@ -103,21 +103,12 @@ typedef int (WINAPI *PFnOnRspSubForQuoteRsp)(int nRequestId, const char *investm
 typedef int (WINAPI *PFnOnRspUnSubForQuoteRsp)(int nRequestId, const char *investmentID, int nErrorId, const char *strErrMsg);
 typedef int (WINAPI *PFnOnRtnDepthMarketData)(MarketData *data);
 
-//void* _OnFrontConnected;
-//void* _OnFrontDisconnected;
-//void* _OnRspUserLogin;
-//void* _OnRspUserLogout;
-//void* _OnRspError;
-//void* _OnRspSubMarketData;
-//void* _OnRspUnSubMarketData;
-//void* _OnRspSubForQuoteRsp;
-//void* _OnRspUnSubForQuoteRsp;
-//void* _OnRtnDepthMarketData;
-
 class QuoteAPI;
 class CTPManager;
 
-DllExport CTPManager* WINAPI CreateAPI(char *pszNsAddress);
+DllExport CTPManager* WINAPI CreateAPI();
+DllExport int WINAPI Init(CTPManager* mgr, char *pszNsAddress);
+DllExport int WINAPI Wait(CTPManager* mgr);
 DllExport void WINAPI DestroyAPI(CTPManager* mgr);
 DllExport void WINAPI RegOnFrontConnected(CTPManager* mgr, PFnOnFrontConnected onFrontConnected);
 DllExport void WINAPI RegOnFrontDisconnected(CTPManager* mgr, PFnOnFrontDisconnected onFrontDisconnected);

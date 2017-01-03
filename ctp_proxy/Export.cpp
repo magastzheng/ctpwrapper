@@ -2,12 +2,22 @@
 #include "QuoteAPI.h";
 #include "TPManager.h"
 
-CTPManager* WINAPI CreateAPI(char *pszNsAddress)
+CTPManager* WINAPI CreateAPI()
 {
 	CTPManager* mgr = new CTPManager();
-	mgr->Init(pszNsAddress);
+	mgr->Create();
 
 	return mgr;
+}
+
+int WINAPI Init(CTPManager* mgr, char *pszNsAddress)
+{
+	return mgr->Init(pszNsAddress);
+}
+
+int WINAPI Wait(CTPManager* mgr)
+{
+	return mgr->Wait();
 }
 
 void WINAPI DestroyAPI(CTPManager* mgr)

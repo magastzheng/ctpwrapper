@@ -11,8 +11,17 @@ class CTPManager
 public:
 	CTPManager(void);
 	~CTPManager(void);
+
+	//创建实例，如果需要注册回调，需要在创建完成时候之后，初始化之前注册回调
+	int Create();
+	//初始化实例
 	int Init(char* pszNsAddress);
+	//阻塞线程
+	int Wait();
 	int Destroy();
+
+public:
+	//注册回调接口
 	void RegOnFrontConnected(PFnOnFrontConnected onFrontConnected);
 	void RegOnFrontDisconnected(PFnOnFrontDisconnected onFrontDisconnected);
 	void RegOnHeartBeatWarning(PFnOnHeartBeatWarning onHeartBeatWarning);

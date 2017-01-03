@@ -12,21 +12,34 @@ CTPManager::~CTPManager(void)
 {
 }
 
-int CTPManager::Init(char* pszNsAddress)
+int CTPManager::Create()
 {
 	api = new QuoteAPI();
 	md = CThostFtdcMdApi::CreateFtdcMdApi("./qlog");
-	md->RegisterSpi((CThostFtdcMdSpi*)api);
-	md->RegisterFront(pszNsAddress);
-	md->Init();
-	md->Join();
 
 	return 0;
 }
 
+int CTPManager::Init(char* pszNsAddress)
+{
+	md->RegisterSpi((CThostFtdcMdSpi*)api);
+	md->RegisterFront(pszNsAddress);
+	md->Init();
+	//md->Join();
+
+	return 0;
+}
+
+int CTPManager::Wait()
+{
+	return md->Join();
+}
+
 int CTPManager::Destroy()
 {
+	md->RegisterSpi(NULL);
 	md->Release();
+	md = NULL;
 
 	if(NULL != api)
 	{

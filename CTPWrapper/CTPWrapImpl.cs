@@ -16,12 +16,22 @@ namespace CTPWrapper
         }
 
         #region public interface
-        public void CreateAPI(string nsAddress)
+        public void CreateAPI()
         {
             if (_handle == IntPtr.Zero)
             {
-                _handle = CTPQuoteAPI.CreateAPI(nsAddress);
+                _handle = CTPQuoteAPI.CreateAPI();
             }
+        }
+
+        public void Init(string nsAddress)
+        {
+            CTPQuoteAPI.Init(_handle, nsAddress);
+        }
+
+        public void Wait()
+        {
+            CTPQuoteAPI.Wait(_handle);
         }
 
         public void DestroyAPI()
@@ -93,6 +103,11 @@ namespace CTPWrapper
         public void RegOnRspUserLogout(OnRspUserLogout callback)
         {
             CTPQuoteAPI.RegOnRspUserLogout(_handle, callback);
+        }
+
+        public void RegOnRspError(OnRspError callback)
+        {
+            CTPQuoteAPI.RegOnRspError(_handle, callback);
         }
 
         public void RegOnRspSubMarketData(OnRspSubMarketData callback)

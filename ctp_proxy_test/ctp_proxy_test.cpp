@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../ctp_proxy/util.h"
+#include "../ctp_proxy/CTPQuote.h"
 
 const char fmt[] = "Address: %x, value: %s ";
 //int copyarray(char *dest[], const char *src[]);
@@ -89,14 +90,13 @@ void printdata(char **data, int num)
 	printf("\n");
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+void testcopyarray()
 {
 	char *p1="hello world";
 	char *p2="hello world";
 
 	char *str[] = {"This", "is", "Haitong", "Asset", "Management", "Company", "in", "Shanghai", "China"};
 	char **p = str;
-
 	int each = sizeof(str[0]);
 	int total = sizeof(str);
 	int num = total / each;
@@ -105,11 +105,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf("%x, %s\n", p, *(p));
 		p++;
 	}
-	//while(NULL != *p)
-	//{
-	//	//printf("%x, %s\n", p, *(p));
-	//	p++;
-	//}
 
 	char **dest = (char**)malloc(sizeof(*dest) * num);
 	for(int i = 0; i < num; i++)
@@ -132,15 +127,37 @@ int _tmain(int argc, _TCHAR* argv[])
 	data = char2arrayv2(dataLen);
 	printdata(data, dataLen);
 
-while(true)
-{
-	data = copypointerarray(str, num);
-	printdata(data, num);
-	freepointerarray(data, num);
-}
+	while(true)
+	{
+		data = copypointerarray(str, num);
+		printdata(data, num);
+		freepointerarray(data, num);
+	}
 
 	printf("dest: %x\n", dest);
 	printf("p1: %x\t p2: %x\n", p1, p2);
+}
+
+int cb_ctp_connected()
+{
+	printf("cb_ctp_connected\n");
+
+	return 0;
+}
+
+void test_ctp_proxy()
+{
+	CTPManager *mgr = CreateAPI();
+	RegOnFrontConnected(mgr, cb_ctp_connected);
+	int ret = Init(mgr, "tcp://test.com");
+
+	ReqUserLogin(mgr, "1234", "1234", "1234");
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	test_ctp_proxy();
+
 	return 0;
 }
 

@@ -24,7 +24,13 @@ namespace CTPWrapper
         private const string DLLName = "ctp_proxy.dll";
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateAPI(string nsAddress);
+        public static extern IntPtr CreateAPI();
+
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int Init(IntPtr mgr, string nsAddress);
+
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int Wait(IntPtr mgr);
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroyAPI(IntPtr mgr);
@@ -66,6 +72,9 @@ namespace CTPWrapper
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void RegOnRspUserLogout(IntPtr mgr, OnRspUserLogout callback);
+
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RegOnRspError(IntPtr mgr, OnRspError callback);
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void RegOnRspSubMarketData(IntPtr mgr, OnRspSubMarketData callback);
